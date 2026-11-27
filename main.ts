@@ -11,8 +11,14 @@ const MOON_LINE =
 const OUT_PATH = "/output/entry.txt";
 const LIMIT = 240;
 
+// Count characters the way the gate does: one Unicode code point each, so
+// an em dash or other wide punctuation never inflates or shrinks the count.
+function countChars(line: string): number {
+  return [...line].length;
+}
+
 function gate(line: string): void {
-  const chars = [...line].length;
+  const chars = countChars(line);
   if (chars < 1 || chars > LIMIT) {
     throw new Error(`entry is ${chars} chars, must be 1-${LIMIT}`);
   }
@@ -35,7 +41,7 @@ function main(): void {
     throw new Error("read-back mismatch: /output/entry.txt differs from the entry");
   }
   gate(written);
-  console.log(`wrote ${[...MOON_LINE].length} chars to ${OUT_PATH}`);
+  console.log(`wrote ${countChars(MOON_LINE)} chars to ${OUT_PATH}`);
 }
 
 main();
